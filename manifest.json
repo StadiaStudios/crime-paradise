@@ -1,0 +1,21 @@
+{
+    "name": "CrimeParadise",
+    "short_name": "CrimeParadise",
+    "description": "Embark on a perilous journey through the underworld of drug dealing. Build your empire, outsmart rivals, and become the ultimate Drug Lord!",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#1a202c",
+    "theme_color": "#1a202c",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+Welcome to Drug Lord Kingdoms. To start you'll get $1000. Firstly go to the Projects and Buy heroine for the cheapest price, Then Teleport to Uptown and sell it for the highest price you can. You can also press next day to refresh prices. Thats how you flip the drugs, You can upgrade your lab in the shop and Craft dmt to sell more. 
+
+You can purchase cars to store Drugs, Materials, Etc. Upgrade your backpack in the store as well. You can buy money bags that hold up to $20000 so that way if you reach the max money amount  you can sell them when your money goes down for $20000 so you still have money
+
+Version Notes:
+You can now enjoy the replaced "Camaro ZL1" with the Customized "Lord Stang". The Leveling system now updates your level every upgrade you buy. Levels will have rewards over time. Max Level is 10 currently. You can now buy a 300EX Quad, 2000s Camaro, And a 2020 Dodge Charger Hellcat. from the Dealership. You can also now craft Glock W Switches by having 2 Switch Materials. The Dealership and Garage now have sleeker looks by displaying side to side instead of one a layer.

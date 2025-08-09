@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Paradise</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="icon.png" type="image/x-icon">
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Google Fonts - Comic Sans MS (or a similar playful font) -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Comic Sans MS (or Comic Neue as fallback) to the body */
+        body {
+            font-family: "Comic Neue", "Comic Sans MS", "Comic Sans", cursive;
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* Removed transition for background as themes are removed */
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+
+        /* Basic button styling for consistency */
+        .btn {
+            @apply px-4 py-2 rounded-md font-bold transition duration-300 ease-in-out transform hover:scale-105;
+        }
+        .btn-primary {
+            @apply bg-blue-600 text-white shadow-lg hover:bg-blue-700;
+        }
+        .btn-success {
+            /* Default: yellow background, white text */
+            background-color: #284b00; /* Tailwind yellow-400 */
+            color: yellow; /* white */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: bold; /* font-bold */
+            border: 2px solid black;
+            transition: all 0.3s ease-in-out; /* transition duration-300 ease-in-out */
+        }
+        .btn-success:hover {
+            /* Hover: darker yellow background, white text */
+            background-color: #284b00; /* Tailwind yellow-500 */
+            color: #ffffff; /* white */
+            transform: scale(1.05); /* transform hover:scale-1.05 */
+            border: 2px solid black;
+        }
+        .btn-danger {
+            /* Default: red background, white text */
+            background-color: #284b00; /* Changed to match btn-success background */
+            color: yellow; /* Changed to match btn-success text */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: bold; /* font-bold */
+            border: 2px solid black;
+            transition: all 0.3s ease-in-out; /* transition duration-300 ease-in-out */
+        }
+        .btn-danger:hover {
+            /* Hover: darker red background, yellow-300 text */
+            background-color: #284b00; /* Changed to match btn-success background */
+            color: #ffffff; /* Changed to match btn-success text */
+            transform: scale(1.05); /* transform hover:scale-1.05 */
+            border: 2px solid black;
+        }
+        .btn-info {
+            @apply bg-yellow-600 text-white shadow-lg hover:bg-yellow-700;
+        }
+        .btn-neutral {
+            @apply bg-gray-600 text-white shadow-lg hover:bg-gray-700;
+        }
+
+        /* Input field styling - Adjusted for dark theme */
+        .input-field {
+            padding: 0.5rem; /* p-2 */
+            border-radius: 0.375rem; /* rounded-md */
+            background-color: #284b00; /* Darker background for consistency */
+            border: 1px solid #000000; /* border-gray-700 */
+            color: yellow; /* Light text color */
+            outline: none; /* focus:outline-none */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5); /* focus:ring-2 focus:ring-blue-500 */
+
+            /* For select elements, ensure options are visible */
+            -webkit-appearance: none; /* Remove default browser styling for select */
+            -moz-appearance: none;
+            appearance: none;
+            /* Custom white arrow for select on dark background */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='white'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 0 111.414 1.414l-4 4a1 0 11-1.414 0l-4-4a1 0 110-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.5em;
+            padding-right: 2.5rem; /* Make space for the arrow */
+            transition: color 0.0s ease-in-out; /* Smooth transition for text color */
+        }
+        /* Style for options within the select dropdown */
+        .input-field option {
+            color: yellow;
+            background-color: #284b00; /* Dark background for options */
+            border: 1px solid #000000;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .input-field:hover {
+            color:white;
+        }
+
+        /* Progress Bar Styling */
+        .progress-bar-container { /* Changed ID to class for multiple bars */
+            width: 100%;
+            background-color: #2d3748; /* Darker gray for container */
+            border-radius: 9999px; /* rounded-full */
+            height: 1.5rem; /* h-6 */
+            margin-top: 1rem; /* mt-4 */
+            overflow: hidden; /* Ensure content stays within bounds */
+            border: 2px solid black;
+        }
+
+        .progress-bar { /* Changed ID to class for multiple bars */
+            background-color: #284b00; /* Green-500 */
+            height: 100%;
+            border-radius: 9999px; /* rounded-full */
+            text-align: center;
+            color: yellow;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.5s ease-in-out; /* Smooth transition for width changes */
+        }
+
+        /* New CSS for icon images */
+        .icon-img {
+            width: 20px; /* Default width for icons */
+            height: 20px; /* Default height for icons */
+            object-fit: contain; /* Ensures the image scales down without cropping */
+            vertical-align: middle; /* Aligns with text */
+            margin-right: 0.5rem; /* Equivalent to mr-2 */
+            display: inline-block; /* Ensures consistent layout */
+        }
+
+        .icon-img-lg {
+            width: 30px; /* Larger width for prominent icons */
+            height: 30px; /* Larger height for prominent icons */
+            object-fit: contain;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+
+        /* New CSS for loading screen */
+        #loading-screen {
+            font-family: "Comic Neue", "Comic Sans MS", "Comic Sans", cursive; /* Maintain game font */
+        }
+        .animate-pulse {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Default/Downtown Theme - This will be the only theme */
+        .bg-gray-800 { background-color: #1a202c; } /* Panels */
+        .bg-gray-700 { background-color: #2d3748; } /* Inner elements */
+        .text-blue-400 { color: #63b3ed; }
+        .text-orange-400 { color: #f6ad55; }
+        .text-purple-400 { color: #a78bfa; }
+        .text-green-400 { color: #68d391; }
+        .text-yellow-400 { color: #f6e05e; }
+
+
+        /* Modal specific styling */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #1a202c;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #e2e8f0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex flex-col items-center justify-center z-50">
+        <h1 class="text-white text-6xl font-bold mb-6 animate-pulse">Welcome to Crime Paradise!</h1>
+        <p id="welcome-description" class="text-gray-300 text-xl text-center max-w-2xl mb-8">
+            A StadiaStudios Production
+        </p>
+        <button id="start-game-btn" class="btn btn-primary text-2xl px-8 py-4">Play Now <i class="fas fa-play ml-2"></i></button>
+    </div>
+
+    <!-- Background Music -->
+    <audio id="downtown-music" loop>
+        <source src="audio/bgmusic.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="docks-music" loop>
+        <source src="audio/docks.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="lab-music" loop>
+        <source src="audio/factory.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Click Sound Effect -->
+    <audio id="click-sfx" preload="auto">
+        <source src="audio/click.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Hover Sound Effect -->
+    <audio id="hover-sfx" preload="auto">
+        <source src="audio/hover.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex flex-col items-center justify-center z-50 hidden">
+        <img src="assets/travel.png" alt="Teleporting" class="w-24 h-24 animate-pulse mb-4">
+        <p class="text-white text-4xl font-bold animate-pulse">Teleporting...</p>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4 shadow-lg hidden" id="navbar">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white text-3xl font-bold flex items-center transition duration-300 ease-in-out">
+                Crime Paradise
+            </a>
+            <div class="flex space-x-4">
+                <!-- Lab Progress Display Slot 1 -->
+                <div id="lab-progress-nav-1" class="hidden bg-gray-700 rounded-md shadow-inner flex items-center px-3 py-1">
+                    <img src="assets/locations/TheLab.png" alt="Lab Progress" class="icon-img mr-1">
+                    <span id="lab-progress-text-1" class="text-white text-lg"></span>
+                    <div class="w-24 bg-gray-600 rounded-full h-4 ml-2">
+                        <div id="lab-progress-bar-nav-1" class="bg-green-500 h-full rounded-full" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <!-- Lab Progress Display Slot 2 -->
+                <div id="lab-progress-nav-2" class="hidden bg-gray-700 rounded-md shadow-inner flex items-center px-3 py-1">
+                    <img src="assets/locations/TheLab.png" alt="Lab Progress" class="icon-img mr-1">
+                    <span id="lab-progress-text-2" class="text-white text-lg"></span>
+                    <div class="w-24 bg-gray-600 rounded-full h-4 ml-2">
+                        <div id="lab-progress-bar-nav-2" class="bg-green-500 h-full rounded-full" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <span id="current-day" class="text-white text-lg px-3 py-1 bg-gray-700 rounded-md shadow-inner">Day 1</span>
+                <span id="player-money" class="text-white text-lg px-3 py-1 bg-gray-700 rounded-md shadow-inner">
+                    <img src="assets/cash.png" alt="Wallet" class="icon-img mr-1"> $1000
+                </span>
+                <!-- Player Level Display -->
+                <span id="player-level" class="text-white text-lg px-3 py-1 bg-gray-700 rounded-md shadow-inner">
+                    <img src="assets/lvl.png" alt="Level" class="icon-img mr-1"> Level 1
+                </span>
+                <span id="player-location" class="text-white text-lg px-3 py-1 bg-gray-700 rounded-md shadow-inner">
+                    <img src="assets/location.png" alt="Location" class="icon-img mr-1"> Downtown
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Game Content -->
+    <main class="container mx-auto p-6 flex-grow hidden" id="main-game-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- Market Panel -->
+            <div id="market-panel" class="bg-gray-800 p-6 rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold mb-4 text-center text-blue-400">
+                    <img src="assets/locations/marketval.png" alt="Market Chart" class="icon-img-lg">Current Market Prices
+                </h2>
+                <table id="market-table" class="game-table mb-6 w-full text-center">
+                    <thead>
+                        <tr>
+                            <th class="py-2">Drug</th>
+                            <th class="py-2">Price per Unit</th>
+                            <th class="py-2">Your Stock</th>
+                            <th class="py-2">Action</th>
+                            <th class="py-2">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Market rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+                <div class="flex justify-center space-x-4">
+                    <button id="next-day-btn" class="btn btn-primary hover:text-yellow-300">Next Day <i class="fas fa-forward ml-2"></i></button>
+                </div>
+            </div>
+
+            <!-- New Lab Panel -->
+            <div id="lab-panel" class="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col hidden">
+                <h2 class="text-3xl font-bold mb-4 text-center text-orange-400">
+                    <img src="assets/locations/TheLab.png" alt="Lab Flask" class="icon-img-lg">The Lab
+                </h2>
+                <!-- Lab Slot 1 -->
+                <div id="lab-slot-1-container">
+                    <div id="lab-controls-slot1" class="mb-4">
+                        <label for="grow-drug-select-1" class="block text-lg mb-2">Choose Drug to Grow (Slot 1):</label>
+                        <select id="grow-drug-select-1" class="input-field w-full mb-4">
+                            <!-- Drugs will be populated here by JavaScript -->
+                        </select>
+                        <button id="start-grow-btn-1" class="btn btn-neutral w-full hover:text-yellow-300">Start Growing (Slot 1)
+                            <i class="fas fa-seedling ml-2"></i>
+                        </button>
+                    </div>
+                    <div id="growth-status-1" class="bg-gray-700 p-4 rounded-md flex-grow mb-4">
+                        <p class="text-gray-400 text-center" id="current-growth-status-1">Nothing is currently growing.</p>
+                        <!-- Progress bar container -->
+                        <div id="progress-bar-container-1" class="w-full bg-gray-600 rounded-full h-4 mt-2 hidden">
+                            <div id="progress-bar-1" class="bg-green-500 h-full rounded-full text-xs text-white flex items-center justify-content-center" style="width: 0%;">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab Slot 2 - Hidden by default, shown at Lab Level 5 -->
+                <div id="lab-slot-2-container" class="hidden">
+                    <hr class="my-4 border-gray-600">
+                    <div id="lab-controls-slot2" class="mb-4">
+                        <label for="grow-drug-select-2" class="block text-lg mb-2">Choose Drug to Grow (Slot 2):</label>
+                        <select id="grow-drug-select-2" class="input-field w-full mb-4">
+                            <!-- Drugs will be populated here by JavaScript -->
+                        </select>
+                        <button id="start-grow-btn-2" class="btn btn-neutral w-full hover:text-yellow-300">Start Growing (Slot 2)
+                            <i class="fas fa-seedling ml-2"></i>
+                        </button>
+                    </div>
+                    <div id="growth-status-2" class="bg-gray-700 p-4 rounded-md flex-grow mb-4">
+                        <p class="text-gray-400 text-center" id="current-growth-status-2">Nothing is currently growing.</p>
+                        <!-- Progress bar container -->
+                        <div id="progress-bar-container-2" class="w-full bg-gray-600 rounded-full h-4 mt-2 hidden">
+                            <div id="progress-bar-2" class="bg-green-500 h-full rounded-full text-xs text-white flex items-center justify-content-center" style="width: 0%;">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Shop Panel -->
+            <div id="shop-panel" class="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col hidden">
+                <h2 class="text-3xl font-bold mb-4 text-center text-purple-400">
+                The Shop
+                </h2>
+                <div class="flex flex-col space-y-4">
+                    <!-- Backpack Upgrades -->
+                    <div class="bg-gray-700 p-4 rounded-md">
+                        <h3 class="text-xl font-bold mb-2 flex items-center">
+                            <img src="assets/backpack.png" alt="Backpack Icon" class="icon-img mr-2">Backpack Upgrades
+                        </h3>
+                        <p id="backpack-level" class="mb-2">Current Level: 1</p>
+                        <p id="backpack-limit-display" class="mb-2">Current Limit: 5000kg</p>
+                        <p id="backpack-next-upgrade-info" class="mb-4">Next Upgrade: 10000kg for $5000</p>
+                        <button id="upgrade-backpack-btn" class="btn btn-success w-full">Upgrade Backpack</button>
+                    </div>
+
+                    <!-- Lab Upgrades -->
+                    <div class="bg-gray-700 p-4 rounded-md">
+                        <h3 class="text-xl font-bold mb-2 flex items-center">
+                            <img src="assets/locations/TheLab.png" alt="Lab Upgrade Icon" class="icon-img mr-2">Lab Upgrades
+                        </h3>
+                        <p id="lab-level" class="mb-2">Current Level: 1</p>
+                        <p id="lab-unlocked-drugs" class="mb-2">Unlocked: Weed</p>
+                        <p id="lab-next-upgrade-info" class="mb-4">Next Upgrade: Unlock Cocaine for $10000</p>
+                        <button id="upgrade-lab-btn" class="btn btn-success w-full">Upgrade Lab</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Garage Panel -->
+            <div id="garage-panel" class="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col hidden">
+                <h2 class="text-3xl font-bold mb-4 text-center text-purple-400">
+                    <img src="assets/icons/garage.png" alt="Garage Icon" class="icon-img-lg">The Garage
+                </h2>
+                <!-- Changed from flex-col space-y-4 to grid for rows -->
+                <div id="car-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <!-- Cars will be rendered here -->
+                    <p class="text-gray-400 text-center col-span-full">You don't own any cars yet. Buy one from the Dealership!</p>
+                </div>
+                <button id="sell-car-btn" class="btn btn-success w-full mt-4 hover:text-yellow-300">Sell Items</button>
+            </div>
+
+            <!-- New Dealership Panel -->
+            <div id="dealership-panel" class="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col hidden">
+                <h2 class="text-3xl font-bold mb-4 text-center text-purple-400">
+                    <img src="assets/dealership.png" alt="Dealership Icon" class="icon-img-lg">Dealership
+                </h2>
+                <!-- Changed from flex-col space-y-4 to grid for rows -->
+                <div id="car-shop-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <!-- Cars for sale will be rendered here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- New Materials Shop Panel -->
+            <div id="materials-shop-panel" class="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col hidden">
+                <h2 class="text-3xl font-bold mb-4 text-center text-green-400">
+                    <i class="fas fa-flask icon-img-lg mr-2"></i>Materials Shop
+                </h2>
+                <table id="materials-table" class="game-table mb-6 w-full text-center">
+                    <thead>
+                        <tr>
+                            <th class="py-2">Material</th>
+                            <th class="py-2">Price per Unit</th>
+                            <th class="py-2">Your Stock</th>
+                            <th class="py-2">Action</th>
+                            <th class="py-2">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="materials-table-body">
+                        <!-- Materials rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- New Riverhall Panel for Robberies -->
+            <div id="riverhall-panel" class="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col hidden">
+                <h2 class="text-3xl font-bold mb-4 text-center text-red-400">
+                    <i class="fas fa-mask icon-img-lg mr-2"></i> Riverhall Robberies
+                </h2>
+                <p class="text-gray-400 text-center mb-4">
+                    In the shadows of Riverhall, lucrative opportunities await. Attempt a daring robbery to earn big!
+                    Requires Level 10.
+                </p>
+                <div class="flex justify-center mt-4">
+                    <button id="start-robbery-btn" class="btn btn-danger w-full hover:text-yellow-300">
+                        Start Robbery ($35000 Reward) <i class="fas fa-hand-fist ml-2"></i>
+                    </button>
+                </div>
+                <div id="robbery-progress-container" class="progress-bar-container hidden">
+                    <div id="robbery-progress-bar" class="progress-bar" style="width: 0%;">0%</div>
+                </div>
+                <p id="robbery-status-text" class="text-gray-400 text-center mt-4">Ready to rob!</p>
+            </div>
+
+
+            <!-- Player Inventory & Messages Panel -->
+            <div id="info-panel" class="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col">
+                <h2 class="text-3xl font-bold mb-4 text-center text-green-400">
+                    <img src="assets/backpack.png" alt="Inventory" class="icon-img-lg">BackPack
+                </h2>
+                <div id="backpack-weight" class="text-center text-lg mb-4">
+                    Space: <span id="current-weight">0kg</span> / <span id="max-weight">5000kg</span>
+                </div>
+                <table id="inventory-table" class="game-table mb-6 w-full text-center">
+                    <thead>
+                        <tr>
+                            <th class="py-2">Drug</th>
+                            <th class="py-2">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Inventory rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+
+                <h2 class="text-3xl font-bold my-4 text-center text-yellow-400">
+                    <img src="assets/messages.png" alt="messages_bell" class="icon-img mr-1"> Messages
+                </h2>
+                <div id="message-log" class="bg-gray-700 p-4 rounded-md h-48 overflow-y-auto text-sm flex-grow">
+                    <p class="text-gray-400">Welcome to the streets, dealer! Let's get rich!</p>
+                </div>
+
+                <h2 class="text-3xl font-bold my-4 text-center text-purple-400">
+                Travel
+                </h2>
+                <select id="location-select" class="input-field mb-4">
+                    <!-- Options will be inserted by JavaScript -->
+                </select>
+                <button id="travel-btn" class="btn btn-info hover:text-yellow-300">Travel
+                    <i class="fas fa-plane ml-2"></i>
+                </button>
+                <button id="go-to-garage-btn" class="btn btn-neutral mt-4 w-full hover:text-yellow-300">Garage
+                    <i class="fas fa-car ml-2"></i>
+                </button>
+                <!-- Removed Materials Shop button from here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Trunk Management Modal -->
+    <div id="trunk-management-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold mb-4 text-center text-blue-400">Manage Trunk</h3>
+            <div id="modal-trunk-weight" class="text-center text-lg mb-4">
+                Trunk: <span id="modal-current-trunk-weight">0kg</span> / <span id="modal-max-trunk-weight">0kg</span>
+            </div>
+            <div class="mb-4">
+                <label for="modal-drug-select" class="block text-lg mb-2">Select Drug:</label>
+                <select id="modal-drug-select" class="input-field w-full mb-4">
+                    <!-- Drugs will be populated here by JavaScript -->
+                </select>
+                <label for="modal-quantity-input" class="block text-lg mb-2">Quantity:</label>
+                <input type="number" id="modal-quantity-input" min="1" value="1" class="input-field w-full mb-4">
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button id="modal-put-btn" class="btn btn-success">Put in Trunk</button>
+                <button id="modal-remove-btn" class="btn btn-danger">Remove from Trunk</button>
+            </div>
+            <div id="modal-trunk-inventory-display" class="mt-4 bg-gray-700 p-4 rounded-md h-48 overflow-y-auto text-sm">
+                <h4 class="text-xl font-bold mb-2">Trunk Contents:</h4>
+                <ul id="modal-trunk-items" class="list-disc list-inside text-gray-300">
+                    <!-- Trunk items will be listed here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sell Car Modal -->
+    <div id="sell-car-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="sell-modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold mb-4 text-center text-red-400">Sell Car</h3>
+            <div class="mb-4">
+                <label for="sell-car-select" class="block text-lg mb-2">Select Car to Sell:</label>
+                <select id="sell-car-select" class="input-field w-full mb-4">
+                    <!-- Owned cars will be populated here by JavaScript -->
+                </select>
+            </div>
+            <div class="flex justify-center">
+                <button id="sell-selected-car-btn" class="btn btn-success">Sell Car</button>
+            </div>
+            <p id="sell-car-value" class="text-center text-lg mt-4 text-yellow-300">Selling Price: $0</p>
+        </div>
+    </div>
+
+    <!-- Car Color Selection Modal -->
+    <div id="color-selection-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="color-modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold mb-4 text-center text-blue-400">Choose Color for Your <span id="color-modal-car-name"></span></h3>
+            <div id="color-buttons-container" class="flex justify-center space-x-4 mt-4">
+                <!-- Color buttons will be dynamically inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Pause/Settings Menu Modal -->
+    <div id="pause-menu-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="pause-modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold mb-4 text-center text-purple-400">Settings Menu</h3>
+            
+            <div class="mb-6">
+                <p class="text-lg text-gray-300 text-center">Game Version: <span id="game-version-display" class="font-bold"></span></p>
+            </div>
+
+            <div class="bg-gray-700 p-4 rounded-md mb-4">
+                <h4 class="text-xl font-bold mb-2 flex items-center">
+                    <i class="fas fa-volume-up text-white text-lg mr-2"></i> Audio Settings
+                </h4>
+                <div class="flex items-center space-x-2 mb-2">
+                    <label for="master-volume-slider" class="text-lg">Master Volume:</label>
+                    <input type="range" id="master-volume-slider" min="0" max="1" step="0.01" value="0.5" class="w-full">
+                </div>
+                <div class="flex items-center space-x-2">
+                    <label for="sfx-volume-slider" class="text-lg">SFX Volume:</label>
+                    <input type="range" id="sfx-volume-slider" min="0" max="1" step="0.01" value="0.5" class="w-full">
+                </div>
+            </div>
+            
+            <div class="flex justify-center mt-6">
+                <button id="resume-game-btn" class="btn btn-primary">Resume Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="game.js"></script>
+    <script src="Robberies.js"></script> <!-- NEW: Link to Robberies.js -->
+    <script>
+        // Register the Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
